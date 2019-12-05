@@ -96,6 +96,9 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
             finish();
         }
 
+
+        (findViewById(R.id.ivAspectRatio)).setEnabled(false);
+
         findViews();
         initListeners();
 
@@ -134,7 +137,9 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
 
     @Override
     public void onDestroy() {
-        mVideoPlayer.release();
+        if (mVideoPlayer != null) {
+            mVideoPlayer.release();
+        }
         if (mFFTask != null && !mFFTask.isProcessCompleted()) {
             mFFTask.sendQuitSignal();
         }
@@ -286,6 +291,9 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
         mVideoPlayer.setUpdateListener(this);
 
         fetchVideoInfo(uri);
+
+        mCropVideoView.setFixedAspectRatio(true);
+        mCropVideoView.setAspectRatio(10, 10);
     }
 
     private void fetchVideoInfo(String uri) {
