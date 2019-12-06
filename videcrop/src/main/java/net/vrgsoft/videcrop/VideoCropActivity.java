@@ -43,6 +43,7 @@ import java.util.Locale;
 public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.OnProgressUpdateListener, VideoSliceSeekBarH.SeekBarChangeListener {
     private static final String VIDEO_CROP_INPUT_PATH = "VIDEO_CROP_INPUT_PATH";
     private static final String VIDEO_CROP_OUTPUT_PATH = "VIDEO_CROP_OUTPUT_PATH";
+    private static final String VIDEO_QUALITY = "VIDEO_QUALITY";
     private static final int STORAGE_REQUEST = 100;
 
     private VideoPlayer mVideoPlayer;
@@ -68,15 +69,17 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
 
     private String inputPath;
     private String outputPath;
+    private String videoQuality;
     private boolean isVideoPlaying = false;
     private boolean isAspectMenuShown = false;
     private FFtask mFFTask;
     private FFmpeg mFFMpeg;
 
-    public static Intent createIntent(Context context, String inputPath, String outputPath) {
+    public static Intent createIntent(Context context, String inputPath, String outputPath, String videoQuality) {
         Intent intent = new Intent(context, VideoCropActivity.class);
         intent.putExtra(VIDEO_CROP_INPUT_PATH, inputPath);
         intent.putExtra(VIDEO_CROP_OUTPUT_PATH, outputPath);
+        intent.putExtra(VIDEO_QUALITY, videoQuality);
         return intent;
     }
 
@@ -90,6 +93,7 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
 
         inputPath = getIntent().getStringExtra(VIDEO_CROP_INPUT_PATH);
         outputPath = getIntent().getStringExtra(VIDEO_CROP_OUTPUT_PATH);
+        videoQuality = getIntent().getStringExtra(VIDEO_QUALITY);
 
         if (TextUtils.isEmpty(inputPath) || TextUtils.isEmpty(outputPath)) {
             Toast.makeText(this, "input and output paths must be valid and not null", Toast.LENGTH_SHORT).show();
@@ -351,6 +355,8 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
                     start,
                     "-i",
                     inputPath,
+                    "-crf",
+                    videoQuality,
                     "-t",
                     duration,
                     "-vf",
