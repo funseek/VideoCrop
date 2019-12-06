@@ -8,7 +8,8 @@ import android.util.Log;
 
 import net.vrgsoft.videcrop.VideoCropActivity;
 import net.vrgsoft.videcrop.util.FileUtils;
-
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.io.File;
 
 
@@ -33,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OPEN_DOCUMENT_REQUEST) {
-            String outputPath = getVideoFolderPath() + "test.mp4";
+            String outputPath = getVideoFolderPath() + "/" + (new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) )+ ".mp4";
             String inputPath = FileUtils.getPath(this, data.getData());
             Log.d(TAG, "inputpath:" + inputPath + " outputpath:" + outputPath);
-            startActivityForResult(VideoCropActivity.createIntent(this, inputPath, outputPath), CROP_REQUEST);
+            startActivityForResult(VideoCropActivity.createIntent(this, inputPath, outputPath, "30"), CROP_REQUEST);
         }
         if(requestCode == CROP_REQUEST && resultCode == RESULT_OK){
             //crop successful
