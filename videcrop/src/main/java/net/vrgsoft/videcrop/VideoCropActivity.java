@@ -41,6 +41,7 @@ import java.util.Locale;
 
 
 public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.OnProgressUpdateListener, VideoSliceSeekBarH.SeekBarChangeListener {
+    private static final String TAG = "VideoCropActivity";
     private static final String VIDEO_CROP_INPUT_PATH = "VIDEO_CROP_INPUT_PATH";
     private static final String VIDEO_CROP_OUTPUT_PATH = "VIDEO_CROP_OUTPUT_PATH";
     private static final String VIDEO_QUALITY = "VIDEO_QUALITY";
@@ -102,7 +103,7 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
         }
 
 
-        (findViewById(R.id.ivAspectRatio)).setEnabled(false);
+//        (findViewById(R.id.ivAspectRatio)).setEnabled(false);
 
         findViews();
         initListeners();
@@ -308,6 +309,7 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
         int videoHeight = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
         int rotationDegrees = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
 
+        Log.d(TAG, "fetchVideoInfo uri:" + uri + " videoWidth:" + videoWidth + " videoHeight:" + videoHeight + " rotationDegrees:" + rotationDegrees);
         mCropVideoView.initBounds(videoWidth, videoHeight, rotationDegrees);
     }
 
