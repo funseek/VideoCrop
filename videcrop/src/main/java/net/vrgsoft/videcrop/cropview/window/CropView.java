@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import net.vrgsoft.videcrop.cropview.window.edge.Edge;
 import net.vrgsoft.videcrop.cropview.window.handle.Handle;
 
 public class CropView extends View {
+    private final String TAG = "CropView";
     private static final int SNAP_RADIUS_DP = 6;
     private static final float DEFAULT_SHOW_GUIDELINES_LIMIT = 100.0F;
     private static final float DEFAULT_CORNER_THICKNESS_DP = PaintUtil.getCornerThickness();
@@ -62,6 +64,7 @@ public class CropView extends View {
     }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        Log.d(TAG, "onSizeChanged w:" + w + " h:" + h + "oldw:" + oldw + " oldh:" + oldh);
         initCropWindow(mBitmapRect);
     }
 
@@ -84,6 +87,7 @@ public class CropView extends View {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
+//        Log.d(TAG, "onTouchEvent x:" + event.getX() + " y:" + event.getY());
         if (!isEnabled()) {
             return false;
         } else {
@@ -285,6 +289,7 @@ public class CropView extends View {
         float top = Edge.TOP.getCoordinate();
         float right = Edge.RIGHT.getCoordinate();
         float bottom = Edge.BOTTOM.getCoordinate();
+        Log.d(TAG, "drawCorners left:" + left + " top:" + top + " right:" + right + " bottom:" + bottom);
         canvas.drawLine(left - mCornerOffset, top - mCornerExtension, left - mCornerOffset, top + mCornerLength, mCornerPaint);
         canvas.drawLine(left, top - mCornerOffset, left + mCornerLength, top - mCornerOffset, mCornerPaint);
         canvas.drawLine(right + mCornerOffset, top - mCornerExtension, right + mCornerOffset, top + mCornerLength, mCornerPaint);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import net.vrgsoft.videcrop.R;
 import net.vrgsoft.videcrop.cropview.window.edge.Edge;
 
 public class CropVideoView extends FrameLayout {
+    private final String TAG = "CropVideoView";
     private PlayerView mPlayerView;
     private CropView mCropView;
     private int mVideoWidth;
@@ -56,6 +58,7 @@ public class CropVideoView extends FrameLayout {
     }
 
     protected void onSizeChanged(int newWidth, int newHeight, int oldw, int oldh) {
+        Log.d(TAG, "onSizeChanged newWidth:" + newWidth + " newHeight:" + newHeight + "oldw:" + oldw + " oldh:" + oldh);
         ViewGroup.LayoutParams lp = getLayoutParams();
         if (mVideoRotationDegrees == 90 || mVideoRotationDegrees == 270) {
             if (mVideoWidth >= mVideoHeight) {
@@ -100,20 +103,15 @@ public class CropVideoView extends FrameLayout {
         Rect result = new Rect();
 
         if (mVideoRotationDegrees == 90 || mVideoRotationDegrees == 270) {
-            if (mVideoRotationDegrees == 90) {
-                result.left = mVideoWidth - (int) (bottom * mVideoWidth / getHeight());
-                result.right = mVideoWidth - (int) (top * mVideoWidth / getHeight());
-                result.top = (int) (left * mVideoHeight / getWidth());
-                result.bottom = (int) (right * mVideoHeight / getWidth());
-            } else {
-                result.left = (int) (top * mVideoWidth / getHeight());
-                result.right = (int) (bottom * mVideoWidth / getHeight());
-                result.top = mVideoHeight - (int) (right * mVideoHeight / getWidth());
-                result.bottom = mVideoHeight - (int) (left * mVideoHeight / getWidth());
-            }
-            int realRight = result.right;
-            result.right = result.bottom - result.top;
-            result.bottom = realRight - result.left;
+
+            result.left = (int) (left * mVideoHeight / getWidth());
+            result.right = (int) (right * mVideoHeight / getWidth());
+            result.top = (int) (top * mVideoWidth / getHeight());
+            result.bottom = (int) (bottom * mVideoWidth / getHeight());
+
+            result.right = result.right - result.left;
+            result.bottom = result.bottom - result.top;
+
         } else {
             result.left = (int) (left * mVideoWidth / getWidth());
             result.right = (int) (right * mVideoWidth / getWidth());
@@ -124,6 +122,10 @@ public class CropVideoView extends FrameLayout {
             result.bottom = result.bottom - result.top;
         }
 
+        Log.d(TAG, "getCropRect mVideoRotationDegrees" + mVideoRotationDegrees);
+        Log.d(TAG, "getCropRect mVideoWidth:" + mVideoWidth + " mVideoHeight:" + mVideoHeight + " getHeight:" + getHeight() + " getWidth:" + getWidth());
+        Log.d(TAG, "getCropRect original left:" + left + " top:" + top + " right:" + right + " bottom" + bottom);
+        Log.d(TAG, "getCropRect left:" + result.left + " top:" + result.top + " right:" + result.right + " bottom" + result.bottom);
         return result;
     }
 
