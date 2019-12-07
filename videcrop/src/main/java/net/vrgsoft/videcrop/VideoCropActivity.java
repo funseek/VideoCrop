@@ -45,6 +45,7 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
     private static final String VIDEO_CROP_INPUT_PATH = "VIDEO_CROP_INPUT_PATH";
     private static final String VIDEO_CROP_OUTPUT_PATH = "VIDEO_CROP_OUTPUT_PATH";
     private static final String VIDEO_QUALITY = "VIDEO_QUALITY";
+    private static final String VIDEO_IS_ENABLE_RATIO = "VIDEO_IS_ENABLE_RATIO";
     private static final int STORAGE_REQUEST = 100;
 
     private VideoPlayer mVideoPlayer;
@@ -73,14 +74,20 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
     private String videoQuality;
     private boolean isVideoPlaying = false;
     private boolean isAspectMenuShown = false;
+    private boolean isEnableRatio = false;
     private FFtask mFFTask;
     private FFmpeg mFFMpeg;
 
     public static Intent createIntent(Context context, String inputPath, String outputPath, String videoQuality) {
+        return createIntent(context, inputPath, outputPath, videoQuality, false);
+    }
+
+    public static Intent createIntent(Context context, String inputPath, String outputPath, String videoQuality, boolean isEnableRagio) {
         Intent intent = new Intent(context, VideoCropActivity.class);
         intent.putExtra(VIDEO_CROP_INPUT_PATH, inputPath);
         intent.putExtra(VIDEO_CROP_OUTPUT_PATH, outputPath);
         intent.putExtra(VIDEO_QUALITY, videoQuality);
+        intent.putExtra(VIDEO_IS_ENABLE_RATIO, isEnableRagio);
         return intent;
     }
 
@@ -95,6 +102,7 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
         inputPath = getIntent().getStringExtra(VIDEO_CROP_INPUT_PATH);
         outputPath = getIntent().getStringExtra(VIDEO_CROP_OUTPUT_PATH);
         videoQuality = getIntent().getStringExtra(VIDEO_QUALITY);
+        isEnableRatio = getIntent().getBooleanExtra(VIDEO_IS_ENABLE_RATIO, false);
 
         if (TextUtils.isEmpty(inputPath) || TextUtils.isEmpty(outputPath)) {
             Toast.makeText(this, "input and output paths must be valid and not null", Toast.LENGTH_SHORT).show();
@@ -102,8 +110,7 @@ public class VideoCropActivity extends AppCompatActivity implements VideoPlayer.
             finish();
         }
 
-
-//        (findViewById(R.id.ivAspectRatio)).setEnabled(false);
+        (findViewById(R.id.ivAspectRatio)).setEnabled(isEnableRatio);
 
         findViews();
         initListeners();
